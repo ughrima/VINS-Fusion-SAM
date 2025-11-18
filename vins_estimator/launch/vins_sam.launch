@@ -1,0 +1,13 @@
+<launch>
+  <!-- Launch SAM Service -->
+  <include file="$(find vins)/launch/sam_service.launch" />
+  
+  <!-- Launch VINS with SAM integration -->
+  <node name="vins_estimator" pkg="vins" type="vins_node" output="screen" args="$(arg config_path)">
+    <!-- SAM integration is controlled via config file parameters -->
+  </node>
+  
+  <!-- Launch RViz -->
+  <include file="$(find vins)/launch/vins_rviz.launch" />
+</launch>
+
