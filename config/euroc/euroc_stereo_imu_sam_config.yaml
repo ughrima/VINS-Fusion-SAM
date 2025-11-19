@@ -81,3 +81,8 @@ save_image: 1                       # save image in pose graph for visualization
 visualize_imu_forward: 0            # output forward imu integration result for visualization
 visualize_camera_size: 0.4          # size of camera marker in RVIZ
 
+
+
+
+
+
