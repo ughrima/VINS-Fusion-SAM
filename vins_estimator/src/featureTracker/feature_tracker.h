@@ -93,3 +93,5 @@ public:
     bool use_sam_;
     int sam_update_frequency_;  // Update SAM mask every N frames
     int frame_count_;
+
+};
