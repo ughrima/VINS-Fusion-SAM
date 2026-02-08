@@ -501,6 +501,16 @@ void FeatureTracker::drawTrack(const cv::Mat &imLeft, const cv::Mat &imRight,
         imTrack = imLeft.clone();
     cv::cvtColor(imTrack, imTrack, CV_GRAY2RGB);
 
+    // Overlay SAM mask: semi-transparent green where mask = 255 (segmented regions)
+    if (use_sam_ && !sam_mask.empty() && sam_mask.rows == imLeft.rows && sam_mask.cols == imLeft.cols)
+    {
+        cv::Rect left_roi(0, 0, sam_mask.cols, sam_mask.rows);
+        cv::Mat left_part = imTrack(left_roi);
+        cv::Mat green_overlay = cv::Mat::zeros(sam_mask.size(), imTrack.type());
+        green_overlay.setTo(cv::Scalar(0, 255, 0), sam_mask);  // BGR: green where segmented
+        cv::addWeighted(left_part, 1.0, green_overlay, 0.35, 0, left_part);
+    }
+
     for (size_t j = 0; j < curLeftPts.size(); j++)
     {
         double len = std::min(1.0, 1.0 * track_cnt[j] / 20);
