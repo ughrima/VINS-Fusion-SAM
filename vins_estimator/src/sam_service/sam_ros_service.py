@@ -77,7 +77,12 @@ class SAMService:
         """
         try:
             # Convert ROS image to OpenCV
-            cv_image = self.bridge.imgmsg_to_cv2(req.image, desired_encoding="bgr8")
+            try:
+                gray = self.bridge.imgmsg_to_cv2(req.image, "mono8")
+                cv_image = cv2.cvtColor(gray, cv2.COLOR_GRAY2BGR)
+            except Exception as e:
+                rospy.logerr(f"Image conversion failed: {e}")
+                return
             
             # Convert BGR to RGB for SAM
             rgb_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2RGB)

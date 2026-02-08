@@ -3,7 +3,7 @@
   <node name="sam_service" pkg="vins" type="sam_ros_service.py" output="screen">
     <!-- SAM Model Configuration -->
     <param name="sam_model_type" value="vit_b" />  <!-- Options: vit_h, vit_l, vit_b -->
-    <param name="sam_checkpoint_path" value="$(find vins)/../../segment-anything/checkpoints/sam_vit_b_01ec64.pth" />
+    <param name="sam_checkpoint_path" value="/home/dhakshinesh/segment-anything/checkpoints/sam_vit_b_01ec64.pth" />
     <param name="use_automatic_mask" value="true" />
     <param name="device" value="cuda" />  <!-- Options: cuda, cpu -->
   </node>
