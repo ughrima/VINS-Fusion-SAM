@@ -16,7 +16,8 @@ find_package(catkin REQUIRED COMPONENTS
     camera_models
     image_transport
     sensor_msgs
-    message_generation)
+    message_generation
+    message_runtime)
 
 find_package(OpenCV REQUIRED)
 
@@ -24,13 +25,12 @@ find_package(OpenCV REQUIRED)
 
 find_package(Ceres REQUIRED)
 
-include_directories(${catkin_INCLUDE_DIRS} ${CERES_INCLUDE_DIRS})
-
-set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
-find_package(Eigen3)
 include_directories(
+  include
   ${catkin_INCLUDE_DIRS}
+  ${CERES_INCLUDE_DIRS}
   ${EIGEN3_INCLUDE_DIR}
+  ${CATKIN_DEVEL_PREFIX}/include
 )
 
 # Generate services
@@ -67,16 +67,29 @@ add_library(vins_lib
     src/initial/initial_sfm.cpp
     src/initial/initial_ex_rotation.cpp
     src/featureTracker/feature_tracker.cpp
-    src/sam_service/sam_client.cpp)
-target_link_libraries(vins_lib ${catkin_LIBRARIES} ${OpenCV_LIBS} ${CERES_LIBRARIES})
+    src/sam_service/sam_client.cpp
+)
+
+add_dependencies(vins_lib
+    ${${PROJECT_NAME}_EXPORTED_TARGETS}
+    ${catkin_EXPORTED_TARGETS}
+)
+
+target_link_libraries(vins_lib
+    ${catkin_LIBRARIES}
+    ${OpenCV_LIBS}
+    ${CERES_LIBRARIES}
+)
 
 
 add_executable(vins_node src/rosNodeTest.cpp)
-target_link_libraries(vins_node vins_lib) 
+add_dependencies(vins_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(vins_node vins_lib)
 
 add_executable(kitti_odom_test src/KITTIOdomTest.cpp)
-target_link_libraries(kitti_odom_test vins_lib) 
+add_dependencies(kitti_odom_test ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(kitti_odom_test vins_lib)
 
 add_executable(kitti_gps_test src/KITTIGPSTest.cpp)
-target_link_libraries(kitti_gps_test vins_lib) 
-
+add_dependencies(kitti_gps_test ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(kitti_gps_test vins_lib)
